@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Tienda virtual de productos para mascotas",
   "main": "server.js",
+  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node back/server.js",
@@ -14,7 +15,8 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
-    "mongoose": "^6.6.4"
+    "mongoose": "^6.6.4",
+    "node-fetch": "^3.2.10"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
