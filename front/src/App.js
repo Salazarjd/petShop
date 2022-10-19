@@ -13,6 +13,7 @@ function App() {
         <div className='container container-fluid'>
           <Routes>
             <Route path='/Home' element={<Home />} />
+            <Route path='/' element={<Home />} />
           </Routes>
         </div>
         <Footer></Footer>

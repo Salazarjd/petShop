@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import MetaData from './layout/MetaData';
+import { useDispatch } from 'react-redux';
+import { getProducts } from '../actions/productActions';
 
 export const Home = () => {
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getProducts());
+    }, [dispatch])
+
   return (
       <>
+          <MetaData title='Lo mejor para tu compañero'></MetaData>
           <h1 id="encabezado_productos">Ultimos productos</h1>
 
           <section id="productos" className='container mt-5'>
