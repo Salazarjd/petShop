@@ -1,91 +1,58 @@
 import React, { useEffect } from 'react'
 import MetaData from './layout/MetaData';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../actions/productActions';
+import { Link } from 'react-router-dom';
+import { useAlert } from 'react-alert';
 
 export const Home = () => {
 
+    const { loading, productos, error } = useSelector(state => state.products);
+    const alert = useAlert();
+
     const dispatch = useDispatch();
     useEffect(() => {
+
+        if(error){
+            return alert.error(error);
+        }
+
         dispatch(getProducts());
+        alert.success("ok")
     }, [dispatch])
 
-  return (
-      <>
-          <MetaData title='Lo mejor para tu compañero'></MetaData>
-          <h1 id="encabezado_productos">Ultimos productos</h1>
+    return (
+        <>
+            {loading ? <h1>Cargando...</h1> : (
+                <>
+                    <MetaData title='Lo mejor para tu compañero'></MetaData>
+                    <h1 id="encabezado_productos">Ultimos productos</h1>
 
-          <section id="productos" className='container mt-5'>
-              <div className='row'>
-                  {/* producto 1 */}
-                  <div className='col-sm-12 col-md-6 col-lg-3 my-3'>
-                      <div className='card p-3 rounded'>
-                          <img className='card-img-top mx-auto' src='./images/rojo.jpg' alt='imagen roja' />
-                          <div className='card-body d-flex flex-column'>
-                              <h5 id='titulo_producto'><a href='http://localhost:3000/'>Nutra red</a></h5>
-                              <div className='rating mt-auto'>
-                                  <div className='rating-outer'>
-                                      <div className='rating-inner'></div>
-                                  </div>
-                                  <span id='no_de_opiniones'>5 reviews</span>
-                              </div>
-                              <p className='card-text'>$72.000</p><a href='http://localhost:3000/'id='view_btn' className='btn btn-block'>Ver detalle</a>
-                          </div>
-                      </div>
-                  </div>
+                    <section id="productos" className='container mt-5'>
+                        <div className='row'>
+                            {productos && productos.map(producto => (
+                                <div key={producto._id} className='col-sm-12 col-md-6 col-lg-3 my-3'>
+                                    <div className='card p-3 rounded'>
+                                        <img className='card-img-top mx-auto' src={producto.imagen[0].url} alt={producto.nombre} />
+                                        <div className='card-body d-flex flex-column'>
+                                            <h5 id='titulo_producto'><Link to={`/producto/${producto._id}`}>{producto.nombre}</Link></h5>
+                                            <div className='rating mt-auto'>
+                                                <div className='rating-outer'>
+                                                    <div className='rating-inner' style={{ width: `${(producto.calificacion / 5) * 100}%` }}></div>
+                                                </div>
+                                                <span id='no_de_opiniones'>{producto.numCalificaciones} Opiniones</span>
+                                            </div>
+                                            <p className='card-text'>${producto.precio}</p><Link to={`/producto/${producto._id}`} id='view_btn' className='btn btn-block'>Ver detalle</Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
 
-                  {/* producto 2 */}
-                  <div className='col-sm-12 col-md-6 col-lg-3 my-3'>
-                      <div className='card p-3 rounded'>
-                          <img className='card-img-top mx-auto' src='./images/verde.jpg' alt='imagen verde' />
-                          <div className='card-body d-flex flex-column'>
-                              <h5 id='titulo_producto'><a href='http://localhost:3000/'>Nutra Verde</a></h5>
-                              <div className='rating mt-auto'>
-                                  <div className='rating-outer'>
-                                      <div className='rating-inner'></div>
-                                  </div>
-                                  <span id='no_de_opiniones'>5 reviews</span>
-                              </div>
-                              <p className='card-text'>$82.000</p><a href='http://localhost:3000/'id='view_btn' className='btn btn-block'>Ver detalle</a>
-                          </div>
-                      </div>
-                  </div>
+                        </div>
+                    </section>
+                </>
+            )}
 
-                  {/* producto 3 */}
-                  <div className='col-sm-12 col-md-6 col-lg-3 my-3'>
-                      <div className='card p-3 rounded'>
-                          <img className='card-img-top mx-auto' src='./images/azul.jpg' alt='imagen azul' />
-                          <div className='card-body d-flex flex-column'>
-                              <h5 id='titulo_producto'><a href='http://localhost:3000/'>Nutra Azul</a></h5>
-                              <div className='rating mt-auto'>
-                                  <div className='rating-outer'>
-                                      <div className='rating-inner'></div>
-                                  </div>
-                                  <span id='no_de_opiniones'>5 reviews</span>
-                              </div>
-                              <p className='card-text'>$66.000</p><a href='http://localhost:3000/'id='view_btn' className='btn btn-block'>Ver detalle</a>
-                          </div>
-                      </div>
-                  </div>
-
-                  {/* producto 4 */}
-                  <div className='col-sm-12 col-md-6 col-lg-3 my-3'>
-                      <div className='card p-3 rounded'>
-                          <img className='card-img-top mx-auto' src='./images/gris.jpg' alt='imagen gris' />
-                          <div className='card-body d-flex flex-column'>
-                              <h5 id='titulo_producto'><a href='http://localhost:3000/'>Nutra gris</a></h5>
-                              <div className='rating mt-auto'>
-                                  <div className='rating-outer'>
-                                      <div className='rating-inner'></div>
-                                  </div>
-                                  <span id='no_de_opiniones'>5 reviews</span>
-                              </div>
-                              <p className='card-text'>$90.000</p><a href='http://localhost:3000/' id='view_btn' className='btn btn-block'>Ver detalle</a>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </section>
-      </>
-  )
+        </>
+    )
 }
