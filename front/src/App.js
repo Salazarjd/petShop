@@ -3,17 +3,19 @@ import React from 'react';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import { Home } from './components/Home';
+import { ProductDetails } from './components/products/ProductDetails';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <Header></Header>
+        <Header/>
         <div className='container container-fluid'>
           <Routes>
             <Route path='/Home' element={<Home />} />
             <Route path='/' element={<Home />} />
+            <Route path='/producto/:id' element={<ProductDetails />} />
           </Routes>
         </div>
         <Footer></Footer>

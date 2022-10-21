@@ -7,7 +7,8 @@ exports.getProducts = async(req, res, next) => {
     const productos = await producto.find();
     if (!productos) {
         return res.status(404).json({
-            success:false
+            success: false,
+            error: true
         })
     }
 
