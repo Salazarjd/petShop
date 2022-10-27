@@ -1,15 +1,14 @@
+const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const producto = require('../models/products');
+const ErrorHandler = require('../utils/errorHandler');
 const fetch = (url) => import('node-fetch').then(({ default: fetch }) => fetch(url));
 
 //ver la lista de productos
-exports.getProducts = async(req, res, next) => {
+exports.getProducts = catchAsyncErrors( async(req, res, next) => {
 
     const productos = await producto.find();
     if (!productos) {
-        return res.status(404).json({
-            success: false,
-            error: true
-        })
+        return next(new ErrorHandler('Productos no encontrados', 404));
     }
 
     res.status(200).json({
@@ -17,18 +16,14 @@ exports.getProducts = async(req, res, next) => {
         count: productos.length,
         productos
     });
-}
+})
 
 //buscar producto by id
-exports.getProductById = async (req, res, next) => {
+exports.getProductById = catchAsyncErrors( async (req, res, next) => {
     
     const product = await producto.findById(req.params.id);
     if (!product) {
-        return res.status(404).json({
-            success: false,
-            message: `Producto con id ${req.params.id} no existe`,
-            error:true
-        })
+        return next(new ErrorHandler('Producto no encontrado', 404));
     }
 
     res.status(200).json({
@@ -36,26 +31,23 @@ exports.getProductById = async (req, res, next) => {
         message:"Aqui encuentras información del producto",
         product
     })
-}
+})
 
 //Crear nuevo producto
-exports.newProduct = async (req, res, next) => {
+exports.newProduct = catchAsyncErrors( async (req, res, next) => {
     const product = await producto.create(req.body);
 
     res.status(201).json({
         success: true,
         product
     });
-}
+})
 
 //update un producto
-exports.updateProduct = async (req, res, next) => {
+exports.updateProduct = catchAsyncErrors( async (req, res, next) => {
     let productoById = await producto.findById(req.params.id);
     if (!productoById) {
-        return res.status(404).json({
-            success: false,
-            message: `Producto con id ${req.params.id} no existe`
-        });
+        return next(new ErrorHandler('Producto no encontrado', 404));
     }
 
     productoById = await producto.findByIdAndUpdate(req.params.id, req.body, {
@@ -68,16 +60,13 @@ exports.updateProduct = async (req, res, next) => {
         message: 'Producto actualizado correctamente',
         productoById
     });
-}
+})
 
 //eliminar un producto
-exports.deleteProduct = async (req, res, next) => {
+exports.deleteProduct = catchAsyncErrors( async (req, res, next) => {
     const productoById = await producto.findById(req.params.id);
     if (!productoById) {
-        return res.status(404).json({
-            success: false,
-            message: `Producto con id ${req.params.id} no existe`
-        });
+        return next(new ErrorHandler('Producto no encontrado', 404));
     }
 
     await productoById.remove();
@@ -86,7 +75,7 @@ exports.deleteProduct = async (req, res, next) => {
         success: true,
         message: 'Producto eliminado correctamente',
     });
-}
+})
 
 //fetch
 function verProductos() {
