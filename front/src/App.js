@@ -5,6 +5,8 @@ import Footer from './components/layout/Footer';
 import { Home } from './components/Home';
 import { ProductDetails } from './components/products/ProductDetails';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Dashboard from './components/admin/Dashboard';
+import ProductList from './components/admin/ProductList';
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
             <Route path='/Home' element={<Home />} />
             <Route path='/' element={<Home />} />
             <Route path='/producto/:id' element={<ProductDetails />} />
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/listaProductos' element={<ProductList />} />
           </Routes>
         </div>
         <Footer></Footer>
