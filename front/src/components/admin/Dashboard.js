@@ -38,7 +38,7 @@ const Dashboard = () => {
                                             <b>250</b>
                                         </div>
                                     </div>
-                                    <Link className='card-footer text-white clearfix smaill z-1' to='/'>
+                                    <Link className='card-footer text-white clearfix smaill z-1' to='/admin/products'>
                                         <span className='float-left'>Ver detalles</span>
                                         <span className='float-right'><i className='fa fa-angle-right'></i></span>
                                     </Link>
@@ -55,7 +55,7 @@ const Dashboard = () => {
                                             <b>80</b>
                                         </div>
                                     </div>
-                                    <Link className='card-footer text-white clearfix smaill z-1' to='/'>
+                                    <Link className='card-footer text-white clearfix smaill z-1' to='/admin/orders'>
                                         <span className='float-left'>Ver detalles</span>
                                         <span className='float-right'><i className='fa fa-angle-right'></i></span>
                                     </Link>
@@ -72,7 +72,7 @@ const Dashboard = () => {
                                             <b>403</b>
                                         </div>
                                     </div>
-                                    <Link className='card-footer text-white clearfix smaill z-1' to='/'>
+                                    <Link className='card-footer text-white clearfix smaill z-1' to='/admin/users'>
                                         <span className='float-left'>Ver detalles</span>
                                         <span className='float-right'><i className='fa fa-angle-right'></i></span>
                                     </Link>

@@ -7,7 +7,7 @@ const Sidebar = () => {
           <nav id='sidebar'>
               <ul className='list-unstyled components'>
                   <li>
-                      <Link to='/admin/dashboard'><i className='fa fa-tachometer'></i>Administración</Link>
+                      <Link to='/Dashboard'><i className='fa fa-tachometer'></i>Administración</Link>
                   </li>
 
                   {/* Botones de productos */}
@@ -19,7 +19,7 @@ const Sidebar = () => {
                               <Link to='/listaProductos'><i className='fa fa-clipboard'></i>Lista de productos</Link>
                           </li>
                           <li>
-                              <Link to='/'><i className='fa fa-plus'></i>Nuevo producto</Link>
+                              <Link to='/nuevoProducto'><i className='fa fa-plus'></i>Nuevo producto</Link>
                           </li>
                       </ul>
                   </li>

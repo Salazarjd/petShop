@@ -1,24 +1,25 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose")
+const validator = require("validator")
+const bcrypt = require("bcryptjs")
+const jwt= require("jsonwebtoken")
 
-const UserSchema = new mongoose.Schema({
+const usuarioSchema = new mongoose.Schema({
     nombre: {
         type: String,
-        required: [true, 'El nombre es obligatorio'],
-        maxlength: [120, 'No puede exceder los 120 caracteres']
+        required: [true, "Por favor ingrese el nombre"],
+        maxlength: [120, "Nombre no puede exceder los 120 caracteres"]
     },
     email: {
         type: String,
-        required: [true, 'El correo es obligatorio'],
+        required: [true, "Por favor ingrese el correo electronico"],
         unique: true,
-        validate: [validator.isEmail, 'Por favor ingrese un email válido']
+        validate: [validator.isEmail, "Por favor ingrese un email valido"]
     },
     password: {
         type: String,
-        required: [true, 'La contraseña es obligatoria'],
-        minlength: [8, 'La contraseña debe tener mínimo 8 caracteres'],
-        select: false,
+        required: [true, "Por favor registre una contraseña"],
+        minlength: [8, "Tu contraseña no puede tener menos de 8 caracteres"],
+        select: false
     },
     avatar: {
         public_id: {
@@ -41,13 +42,27 @@ const UserSchema = new mongoose.Schema({
 
     resetPasswordToken: String,
     resetPasswordExpire: Date
+
 })
 
-UserSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
+//Encriptamos contraseña antes de guardarla
+usuarioSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) {
         next()
     }
     this.password = await bcrypt.hash(this.password, 10)
 })
 
-module.exports = mongoose.model('Auth', UserSchema);
+//Decodificados contraseñas y comparamos
+usuarioSchema.methods.compararPass = async function (passDada){
+    return await bcrypt.compare(passDada, this.password)
+}
+
+//Retornar un JWT token
+usuarioSchema.methods.getJwtToken = function () {
+    return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_TIEMPO_EXPIRACION
+    })
+}
+
+module.exports = mongoose.model("auth", usuarioSchema)
