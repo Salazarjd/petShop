@@ -1,10 +1,31 @@
 const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const producto = require('../models/products');
+const APIFeatures = require('../utils/apiFeatures');
 const ErrorHandler = require('../utils/errorHandler');
 const fetch = (url) => import('node-fetch').then(({ default: fetch }) => fetch(url));
 
 //ver la lista de productos
-exports.getProducts = catchAsyncErrors( async(req, res, next) => {
+exports.getProducts = catchAsyncErrors(async (req, res, next) => {
+    
+    const resPerPage = 3;
+    const productsCount = await producto.countDocuments();
+
+    const apiFeatures = new APIFeatures(producto.find(), req.query)
+        .search()
+        .filter();
+
+    let products = await apiFeatures.query;
+    let filteredProductsCount = products.length;
+    apiFeatures.pagination(resPerPage);
+    products = await apiFeatures.query.clone();
+
+    res.status(200).json({
+        success: true,
+        productsCount,
+        resPerPage,
+        filteredProductsCount,
+        products
+    })
 
     const productos = await producto.find();
     if (!productos) {
@@ -78,6 +99,82 @@ exports.deleteProduct = catchAsyncErrors( async (req, res, next) => {
     });
 })
 
+//crear o actualizar una review
+exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
+    const { rating, comentario, idProducto } = req.body;
+
+    const opinion = {
+        nombreCliente: req.user.nombre,
+        rating: Number(rating),
+        comentario
+    }
+
+    const product = await producto.findById(idProducto);
+
+    const isReviewed = product.opiniones.find(item => item.nombreCliente === req.user.nombre);
+
+    if (isReviewed) {
+        product.opiniones.forEach(opinion => {
+            if (opinion.nombreCliente === req.user.nombre) {
+                opinion.comentario = comentario;
+                opinion.rating = rating;
+            }
+        })
+    } else {
+        product.opiniones.push(opinion);
+        product.numCalificaciones = product.opiniones.length;
+    }
+
+    product.calificacion = product.opiniones.reduce((acc, opinion) =>
+        opinion.rating + acc, 0) / product.opiniones.length;
+    
+    
+    await product.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        success: true,
+        message: "Hemos opinado correctamente"
+    })
+})
+
+//ver todas las review de un producto
+exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
+    const product = await producto.findById(req.query.id);
+
+    res.status(200).json({
+        success: true,
+        opiniones: product.opiniones
+    })
+})
+
+//Eliminar review
+exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
+    const product = await producto.findById(req.query.idProducto);
+
+    const opiniones = product.opiniones.filter(opinion =>
+        opinion._id.toString() !== req.query.idReview.toString());
+    
+    const numCalificaciones = opiniones.length;
+
+    const calificacion = product.opiniones.reduce((acc, Opinion) =>
+        Opinion.rating + acc, 0) / opiniones.length;
+
+    await producto.findByIdAndUpdate(req.query.idProducto, {
+        opiniones,
+        calificacion,
+        numCalificaciones
+    }, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true,
+        message: "review eliminada correctamente"
+    })
+})
+
 //fetch
 function verProductos() {
     fetch('http://localhost:4000/api/productos')
@@ -95,4 +192,3 @@ function verProductoPorId(id) {
         .catch(err => console.error(err));
 }
 
-// verProductoPorId('6346a5fc7bc30d30a7c65598');
