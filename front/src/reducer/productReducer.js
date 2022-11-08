@@ -15,14 +15,16 @@ export const productReducer = (state = { products: [] }, action) => {
                 loading: true,
                 productos: []
             }
-        
+
         case ALL_PRODUCTS_SUCCESS:
             return {
                 loading: false,
-                productos: action.payload.productos,
-                cantidad: action.payload.cantidad
+                products: action.payload.products,
+                productsCount: action.payload.productsCount,
+                resPerPage: action.payload.resPerPage,
+                filteredProductsCount: action.payload.filteredProductsCount
             }
-        
+
         case ALL_PRODUCTS_FAIL:
             return {
                 loading: false,
@@ -34,7 +36,7 @@ export const productReducer = (state = { products: [] }, action) => {
                 ...state,
                 errors: null
             }
-        
+
         default:
             return state;
     }
@@ -43,20 +45,20 @@ export const productReducer = (state = { products: [] }, action) => {
 //reducer para tener todos los detalles
 export const productDetailsReducer = (state = { product: {} }, action) => {
     switch (action.type) {
-        
+
         case PRODUCT_DETAILS_REQUEST:
             return {
                 ...state,
                 loading: true
             }
-        
+
         case PRODUCT_DETAILS_SUCCESS:
             return {
                 loading: false,
                 product: action.payload
-                
+
             }
-        
+
         case PRODUCT_DETAILS_FAIL:
             return {
                 ...state,
@@ -68,7 +70,7 @@ export const productDetailsReducer = (state = { product: {} }, action) => {
                 ...state,
                 error: null
             }
-        
+
         default:
             return state;
     }

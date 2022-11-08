@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import MetaData from './layout/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../actions/productActions';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useAlert } from 'react-alert';
+import Pagination from 'react-js-pagination'
+ 
 
 export const Home = () => {
-
-    const { loading, productos, error } = useSelector(state => state.products);
+    const params = useParams();
+    const keyword = params.keyword
+    const [currentPage, setCurrentPage] = useState(1);
+    const { loading, products, error, resPerPage, productsCount } = useSelector(state => state.products);
     const alert = useAlert();
+    
 
     const dispatch = useDispatch();
     useEffect(() => {
@@ -17,8 +22,12 @@ export const Home = () => {
             return alert.error(error);
         }
 
-        dispatch(getProducts());
-    }, [dispatch])
+        dispatch(getProducts(currentPage, keyword));
+    }, [dispatch, alert, error, currentPage, keyword])
+
+    function setCurrentPageNo(pageNumber) {
+        setCurrentPage(pageNumber)
+    }
 
     return (
         <>
@@ -29,7 +38,7 @@ export const Home = () => {
 
                     <section id="productos" className='container mt-5'>
                         <div className='row'>
-                            {productos && productos.map(producto => (
+                            {products && products.map(producto => (
                                 <div key={producto._id} className='col-sm-12 col-md-6 col-lg-3 my-3'>
                                     <div className='card p-3 rounded'>
                                         <img className='card-img-top mx-auto' src={producto.imagen[0].url} alt={producto.nombre} />
@@ -49,6 +58,21 @@ export const Home = () => {
 
                         </div>
                     </section>
+
+                    <div className='d-flex justyfy-content-center mt-5'>
+                        <Pagination
+                            activePage={currentPage}
+                            itemsCountPerPage={resPerPage}
+                            totalItemsCount={productsCount}
+                            onChange={setCurrentPageNo}
+                            nextPageText={'Siguiente'}
+                            prevPageText={'Anterior'}
+                            firstPageText={'Primera'}
+                            lastPageText={'Ultima'}
+                            itemClass='page-item'
+                            linkClass='page-link'
+                        />
+                    </div>
                 </>
             )}
 
