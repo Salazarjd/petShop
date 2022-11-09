@@ -1,0 +1,36 @@
+import React from 'react'
+import MetaData from '../layout/MetaData';
+import { Link } from 'react-router-dom';
+
+export const Login = () => {
+    return (
+        <>
+            <MetaData title={'Inicie Sesión'} />
+            <div className='row wrapper'>
+                <div className='col-10 col-lg-5'>
+                    <form className='shadow-lg'>
+                        <h1 className='mb-3'>Inicio de Sesión</h1>
+                        {/* campo para el email */}
+                        <div className='form-group'>
+                            <label htmlFor='email_field'>Correo electrónico</label>
+                            <input type='email' id='email_field' className='form-control' />
+                        </div>
+                        {/* campo para el password */}
+                        <div className='form-group'>
+                            <label htmlFor='password_field'>Password</label>
+                            <input type='password' id='password_field' className='form-control' />
+                        </div>
+
+                        <Link to='/password/forgot' className='float-right mb-4'>Olvidó su contraseña?</Link>
+
+                        {/* Botón iniciar Sesión */}
+                        <button id='login_button' type='submit' className='btn btn-block py-3'>LOGIN</button>
+
+                        <Link to='/register' className='float-right mt-3'>Usuario nuevo? Registrese aquí</Link>
+
+                    </form>
+                </div>
+            </div>
+        </>
+    )
+}
