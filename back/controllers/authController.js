@@ -81,7 +81,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     await user.save({ validationBeforeSave: false });
 
     //Crear un url para hacer el reset de la contraseña
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/resetPassword/${resetToken}`
+    const resetUrl = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`
 
     const mensaje = `Tu link para ajustar una nueva contraseña es el 
         siguiente: \n\n${resetUrl}\n\n
