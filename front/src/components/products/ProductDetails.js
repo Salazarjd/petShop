@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { getProductDetails, clearErrors } from '../../actions/productActions';
 import { useAlert } from 'react-alert';
 import { Carousel } from 'react-bootstrap';
+import { addItemToCart } from '../../actions/cartActions';
 
 export const ProductDetails = () => {
 
@@ -43,6 +44,12 @@ export const ProductDetails = () => {
         setQuantity(qty)
     }
 
+    const addToCart = () => {
+        dispatch(addItemToCart(id, quantity));
+        alert.success('Producto agregado al carro')
+    }
+
+
     return (
         <>
             {loading ? <i className='fa fa-refresh fa-spin fa-3x fa-fw'></i> : (
@@ -53,7 +60,7 @@ export const ProductDetails = () => {
                             <Carousel pause='hover'>
                                 {product.imagen && product.imagen.map(img => (
                                     <Carousel.Item key={img.public_id}>
-                                        <img className='d-block w-100' src={`../${img.url}`} alt={product.nombre}/>
+                                        <img className='d-block w-100' src={`../${img.url}`} alt={product.nombre} />
                                     </Carousel.Item>
                                 ))}
                             </Carousel>
@@ -63,19 +70,19 @@ export const ProductDetails = () => {
                             <h3>{product.nombre}</h3>
                             <p id='product_id'>ID del producto {product._id}</p>
                             <hr />
-                            
+
                             <div className='rating-outer'>
-                                    <div className='rating-inner' style={{width: `${(product.calificacion/5)*100}%`}}></div>
+                                <div className='rating-inner' style={{ width: `${(product.calificacion / 5) * 100}%` }}></div>
                             </div>
                             <span id='No_de_reviews'>        ({product.numCalificaciones} Reviews)</span>
                             <hr />
                             <p id='precio_producto'>${product.precio}</p>
                             <div className='stockCounter d-inline'>
                                 <span className='btn btn-danger minus' onClick={decreaseQty}> - </span>
-                                <input type='number' className='form-control count d-inline' value={ quantity } readOnly />
+                                <input type='number' className='form-control count d-inline' value={quantity} readOnly />
                                 <span className='btn btn-primary plus' onClick={increaseQty}> + </span>
                             </div>
-                            <button type='button' id='carrito_btn' className='btn btn-primary d-inline ml-4' disabled={product.inventario === 0}>Agregar al Carrito</button>
+                            <button type='button' id='carrito_btn' className='btn btn-primary d-inline ml-4' disabled={product.inventario === 0} onClick={addToCart}>Agregar al Carrito</button>
                             <hr />
                             <p>Estado: <span id='stock_stado' className={product.inventario > 0 ? 'greenColor' : 'redColor'}>{product.inventario > 0 ? 'En existencia' : 'Agotado'}</span></p>
                             <hr />
