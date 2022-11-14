@@ -81,7 +81,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     await user.save({ validationBeforeSave: false });
 
     //Crear un url para hacer el reset de la contraseña
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/resetPassword/${resetToken}`
+    const resetUrl = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`
 
     const mensaje = `Tu link para ajustar una nueva contraseña es el 
         siguiente: \n\n${resetUrl}\n\n
@@ -170,7 +170,23 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
         email: req.body.email
     }
 
-    //Update avatar pendiente
+    //Update avatar
+    if (req.body.avatar !== '') {
+        const user = await User.findById(req.user.id);
+        const image_id = user.avatar.public_id;
+        const res = await cloudinary.v2.uploader.destroy(image_id);
+
+        const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+            folder: 'avatars',
+            width: 240,
+            crop: 'scale'
+        })
+
+        newUserData.avatar = {
+            public_id: result.public_id,
+            url: result.secure_url
+        }
+    }
 
     const user = await User.findByIdAndUpdate(req.user.id, nuevaData, {
         new: true,
