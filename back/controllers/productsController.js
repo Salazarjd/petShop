@@ -192,3 +192,24 @@ function verProductoPorId(id) {
         .catch(err => console.error(err));
 }
 
+//ver la lista de productos (admin)
+exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
+    
+    const products = await producto.find();
+
+    res.status(200).json({
+        
+        products
+    })
+
+    // const productos = await producto.find();
+    // if (!productos) {
+    //     return next(new ErrorHandler('Productos no encontrados', 404));
+    // }
+
+    // res.status(200).json({
+    //     success: true,
+    //     count: productos.length,
+    //     productos
+    // });
+})
