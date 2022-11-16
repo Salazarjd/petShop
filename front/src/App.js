@@ -19,6 +19,8 @@ import { UpdateProfile } from './components/user/UpdateProfile';
 import { UpdatePassword } from './components/user/UpdatePassword';
 import ForgotPassword from './components/user/ForgotPassword';
 import { NewPassword } from './components/user/NewPassword';
+import { UpdateProduct } from './components/admin/UpdateProduct';
+import Shipping from './components/cart/Shipping';
 
 function App() {
 
@@ -49,7 +51,11 @@ function App() {
             
             {/* Ruta protegida */}
             <Route path='/Dashboard'
-              element={<ProtectedRoute isAdmin={true}><Dashboard /></ProtectedRoute> } />
+              element={<ProtectedRoute isAdmin={true}><Dashboard /></ProtectedRoute>} />
+            <Route path='/updateProduct/:id'
+              element={<ProtectedRoute isAdmin={true}><UpdateProduct /></ProtectedRoute> } />
+              <Route path='/shipping'
+              element={<ProtectedRoute><Shipping /></ProtectedRoute> } />
           </Routes>
         </div>
         <Footer></Footer>
