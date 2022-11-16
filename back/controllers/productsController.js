@@ -2,6 +2,7 @@ const catchAsyncErrors = require('../middleware/catchAsyncErrors');
 const producto = require('../models/products');
 const APIFeatures = require('../utils/apiFeatures');
 const ErrorHandler = require('../utils/errorHandler');
+const cloudinary = require('cloudinary');
 const fetch = (url) => import('node-fetch').then(({ default: fetch }) => fetch(url));
 
 //ver la lista de productos
@@ -54,15 +55,34 @@ exports.getProductById = catchAsyncErrors( async (req, res, next) => {
     })
 })
 
-//Crear nuevo producto
+//Crear nuevo producto /api/productos
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
+    let imagen=[]
+    if(typeof req.body.imagen==="string"){
+        imagen.push(req.body.imagen)
+    }else{
+        imagen=req.body.imagen
+    }
+
+    let imagenLink=[]
+
+    for (let i=0; i<imagen.length;i++){
+        const result = await cloudinary.v2.uploader.upload(imagen[i],{
+            folder:"products"
+        })
+        imagenLink.push({
+            public_id:result.public_id,
+            url: result.secure_url
+        })
+    }
+
+    req.body.imagen=imagenLink
     req.body.user = req.user.id;
     const product = await producto.create(req.body);
-
     res.status(201).json({
         success: true,
         product
-    });
+    })
 })
 
 //update un producto
