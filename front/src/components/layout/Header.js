@@ -52,7 +52,7 @@ const Header = () => {
                 {user && user.role === 'admin' && (
                   <Link className="dropdown-item" to="/dashboard">Adm. Productos</Link>)}
 
-                <Link className="dropdown-item" to="/">Pedidos</Link>
+                <Link className="dropdown-item" to="/myOrders">Pedidos</Link>
                 <Link className="dropdown-item" to="/yo">Mi Cuenta</Link>
                 <Link className="dropdown-item" to="/" onClick={logoutHandler}>Cerrar sesion</Link>
               </div>

@@ -13,8 +13,7 @@ import {
     ORDER_DETAILS_FAIL
 } from "../constants/orderConstants"
 
-export const createOrder = (order) => async (dispatch) => {
-    
+export const createOrder = (order) => async (dispatch)=>{
     try{
         dispatch({type: CREATE_ORDER_REQUEST})
 
@@ -23,9 +22,8 @@ export const createOrder = (order) => async (dispatch) => {
                 "Content-Type":"application/json"
             }
         }
-        
-        const { data } = await axios.post("/api/order/new", order, config)
-        console.log(data)
+
+        const {data} = await axios.post("/api/order/new", order, config)
 
         dispatch({
             type: CREATE_ORDER_SUCCESS,
