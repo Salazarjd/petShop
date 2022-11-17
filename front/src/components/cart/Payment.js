@@ -8,24 +8,24 @@ import { useAlert } from 'react-alert';
 import CheckoutSteps from './CheckOutSteps';
 
 export const Payment = () => {
-    const navigate= useNavigate();
-    const alert= useAlert();
-    const dispatch= useDispatch();
-    const id= uuid.v4()
-    const {cartItems, shippingInfo} = useSelector(state => state.cart)
-    const {error} = useSelector(state => state.newOrder)
+    const navigate = useNavigate();
+    const alert = useAlert();
+    const dispatch = useDispatch();
+    const id = uuid.v4()
+    const { cartItems, shippingInfo } = useSelector(state => state.cart)
+    const { error } = useSelector(state => state.newOrder)
 
-    useEffect(()=>{
-        if (error){
+    useEffect(() => {
+        if (error) {
             alert.error(error)
             dispatch(clearErrors)
         }
-    },[dispatch, alert, error])
+    }, [dispatch, alert, error])
 
-    let items=[];
+    let Items = [];
 
-    cartItems.forEach(elem =>{
-        items.push({
+    cartItems.forEach(elem => {
+        Items.push({
             nombre: elem.nombre,
             cantidad: elem.quantity,
             imagen: elem.imagen,
@@ -34,39 +34,39 @@ export const Payment = () => {
         })
     })
 
-    const order={
-        items,
+    const order = {
+        Items,
         envioInfo: shippingInfo
     }
 
-    const orderInfo= JSON.parse(sessionStorage.getItem("orderInfo"));
+    const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
 
-    if (orderInfo){
-        order.precioItems= orderInfo.precioItems
-        order.precioEnvio=orderInfo.precioEnvio
-        order.precioImpuesto= orderInfo.precioImpuesto
-        order.precioTotal= orderInfo.precioTotal
-        order.pagoInfo={
-            id:id,
-            estado:"Aceptado"
+    if (orderInfo) {
+        order.precioItems = orderInfo.precioItems
+        order.precioEnvio = orderInfo.precioEnvio
+        order.precioImpuesto = orderInfo.precioImpuesto
+        order.precioTotal = orderInfo.precioTotal
+        order.pagoInfo = {
+            id: id,
+            estado: "Aceptado"
         }
     }
 
-    const submitHandler = async (e) =>{
+    const submitHandler = async (e) => {
         e.preventDefault();
-        try{
+        try {
             dispatch(createOrder(order))
             localStorage.removeItem("cartItems")
             window.alert("Orden registrada correctamente")
             navigate("/success")
             window.location.reload(false)
-        }catch(error){
+        } catch (error) {
             window.alert("no se logró registrar la compra")
         }
     }
 
-  return (
-    <Fragment>
+    return (
+        <Fragment>
             <MetaData title={'Pago'} />
 
             <CheckoutSteps shipping confirmOrder payment />
@@ -117,5 +117,5 @@ export const Payment = () => {
 
         </Fragment>
 
-  )
+    )
 }

@@ -1,22 +1,22 @@
 import React, { Fragment } from 'react'
 import { useSelector } from 'react-redux';
-import { useNavigate , Link} from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import MetaData from '../layout/MetaData'
 import CheckoutSteps from './CheckOutSteps';
 
 export const ConfirmOrder = () => {
-    const navigate=useNavigate();
-    const { cartItems, shippingInfo} = useSelector(state => state.cart)
-    const { user } = useSelector (state => state.auth)
+    const navigate = useNavigate();
+    const { cartItems, shippingInfo } = useSelector(state => state.cart)
+    const { user } = useSelector(state => state.auth)
 
     //calculemos los valores
-    const precioItems= cartItems.reduce((acc, item) => acc+item.precio * item.quantity, 0)
-    const precioEnvio= precioItems> 125000 ? 0: 12000
+    const precioItems = cartItems.reduce((acc, item) => acc + item.precio * item.quantity, 0)
+    const precioEnvio = precioItems > 125000 ? 0 : 12000
     const precioImpuesto = Number((0.19 * precioItems).toFixed(2))
-    const precioTotal =(precioItems + precioEnvio + precioImpuesto).toFixed(2)
+    const precioTotal = (precioItems + precioEnvio + precioImpuesto).toFixed(2)
 
-    const processToPayment=()=>{
-        const data={
+    const processToPayment = () => {
+        const data = {
             precioItems: precioItems.toFixed(2),
             precioEnvio,
             precioImpuesto,
@@ -26,8 +26,8 @@ export const ConfirmOrder = () => {
         sessionStorage.setItem('orderInfo', JSON.stringify(data))
         navigate("/payment")
     }
-  return (
-    <Fragment>
+    return (
+        <Fragment>
 
             <MetaData title={'Confirmar Orden'} />
 
@@ -90,5 +90,5 @@ export const ConfirmOrder = () => {
             </div>
 
         </Fragment>
-  )
+    )
 }
