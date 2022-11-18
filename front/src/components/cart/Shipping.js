@@ -11,11 +11,11 @@ export const Shipping = () => {
     const navigate = useNavigate()
     const { shippingInfo } = useSelector(state => state.cart)
 
-    const direccion = 'kr 84'
-    const telefono = '3109876552'
-    // const [direccion, setDireccion] = useState(shippingInfo.direccion)}
+    // const direccion = 'kr 84'
+    // const telefono = '3109876552'
+    const [direccion, setDireccion] = useState(shippingInfo.direccion)
     const [ciudad, setCiudad] = useState(shippingInfo.ciudad)
-    // const [telefono, setTelefono] = useState(shippingInfo.telefono)
+    const [telefono, setTelefono] = useState(shippingInfo.telefono)
     const [departamento, setDepartamento] = useState(shippingInfo.departamento)
     const [ciudades, setCiudades] = useState([])
 
@@ -43,7 +43,7 @@ export const Shipping = () => {
             <CheckoutSteps shipping />
             <div className="row wrapper">
                 <div className="col-10 col-lg-5">
-                    <form className="shadow-lg" onClick={submitHandler}>
+                    <form className="shadow-lg" onSubmit={submitHandler}>
                         <h1 className="mb-4">Información de envio</h1>
                         <div className="form-group">
                             <label htmlFor="address_field">Dirección</label>
@@ -51,8 +51,8 @@ export const Shipping = () => {
                                 type="text"
                                 id="address_field"
                                 className="form-control"
-                                value="kr 84"
-                                // onChange={(e) => setDireccion(e.target.value)}
+                                value={direccion}
+                                onChange={(e) => setDireccion(e.target.value)}
                                 required
                             />
                         </div>
@@ -63,8 +63,8 @@ export const Shipping = () => {
                                 type="phone"
                                 id="phone_field"
                                 className="form-control"
-                                value="3103876443"
-                                // onChange={(e) => setTelefono(e.target.value)}
+                                value={telefono}
+                                onChange={(e) => setTelefono(e.target.value)}
                                 required
                             />
                         </div>
