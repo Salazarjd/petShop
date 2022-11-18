@@ -22,10 +22,10 @@ export const Payment = () => {
         }
     }, [dispatch, alert, error])
 
-    let Items = [];
+    let items = [];
 
     cartItems.forEach(elem => {
-        Items.push({
+        items.push({
             nombre: elem.nombre,
             cantidad: elem.quantity,
             imagen: elem.imagen,
@@ -35,7 +35,7 @@ export const Payment = () => {
     })
 
     const order = {
-        Items,
+        items,
         envioInfo: shippingInfo
     }
 
