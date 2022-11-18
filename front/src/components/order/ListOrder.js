@@ -63,7 +63,7 @@ export const ListOrder = () => {
             data.rows.push({
                 fecha: fecha,
                 id: order._id,
-                cantidadItems: order.Items.length,
+                cantidadItems: order.items.length,
                 costo: `$${order.precioTotal}`,
                 estado: order.estado && String(order.estado).includes("Entregado")
                     ? <p style={{ color: "green" }}>{order.estado}</p>

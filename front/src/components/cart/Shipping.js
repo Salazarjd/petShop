@@ -11,9 +11,11 @@ export const Shipping = () => {
     const navigate = useNavigate()
     const { shippingInfo } = useSelector(state => state.cart)
 
-    const [direccion, setDireccion] = useState(shippingInfo.direccion)
+    const direccion = 'kr 84'
+    const telefono = '3109876552'
+    // const [direccion, setDireccion] = useState(shippingInfo.direccion)}
     const [ciudad, setCiudad] = useState(shippingInfo.ciudad)
-    const [telefono, setTelefono] = useState(shippingInfo.telefono)
+    // const [telefono, setTelefono] = useState(shippingInfo.telefono)
     const [departamento, setDepartamento] = useState(shippingInfo.departamento)
     const [ciudades, setCiudades] = useState([])
 
@@ -49,8 +51,8 @@ export const Shipping = () => {
                                 type="text"
                                 id="address_field"
                                 className="form-control"
-                                value={direccion}
-                                onChange={(e) => setDireccion(e.target.value)}
+                                value="kr 84"
+                                // onChange={(e) => setDireccion(e.target.value)}
                                 required
                             />
                         </div>
@@ -61,8 +63,8 @@ export const Shipping = () => {
                                 type="phone"
                                 id="phone_field"
                                 className="form-control"
-                                value={telefono}
-                                onChange={(e) => setTelefono(e.target.value)}
+                                value="3103876443"
+                                // onChange={(e) => setTelefono(e.target.value)}
                                 required
                             />
                         </div>

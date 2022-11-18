@@ -4,7 +4,7 @@ const ErrorHandler = require('../utils/errorHandler');
 
 //crear una nueva orden
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
-    const { Items, 
+    const { items, 
             envioInfo, 
             precioItems, 
             precioImpuesto, 
@@ -13,7 +13,7 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
             pagoInfo } = req.body;
 
     const order = await Order.create({
-        Items,
+        items,
         envioInfo,
         precioItems,
         precioImpuesto,

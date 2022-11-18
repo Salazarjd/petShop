@@ -25,7 +25,7 @@ const orderSchema = mongoose.Schema({
         required: true,
         ref: 'auth'
     },
-    Items: [{
+    items: [{
         nombre: {
             type: String,
             required: true
